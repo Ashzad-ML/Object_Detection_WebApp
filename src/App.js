@@ -91,6 +91,7 @@ function App() {
         <Webcam
           ref={webcamRef}
           muted={true} 
+          videoConstraints={{ facingMode: { exact: "environment" } }}
           style={{
             position: "absolute",
             marginLeft: "auto",
@@ -100,7 +101,7 @@ function App() {
             textAlign: "center",
             zindex: 9,
             width: 640,
-            height: 480,
+            height: 640,
           }}
         />
 
@@ -115,7 +116,7 @@ function App() {
             textAlign: "center",
             zIndex: 8,
             width: 640,
-            height: 480,
+            height: 640,
           }}
         />
       </header>
