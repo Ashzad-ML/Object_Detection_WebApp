@@ -14,14 +14,19 @@ function App() {
   // Main function
   const runCoco = async () => {
     // 3. TODO - Load network 
-    const net = await tf.loadGraphModel('https://livelong.s3.au-syd.cloud-object-storage.appdomain.cloud/model.json')
+    const net = await tf.loadGraphModel('https://nexrender-backend-9320740.s3.ap-south-1.amazonaws.com/ashzad/model.json')
     
     // Loop and detect hands
-    setInterval(() => {
+  //   setInterval(() => {
+  //     detect(net);
+  //   }, 16.7);
+  // };
+    const detectLoop = () => {
       detect(net);
-    }, 16.7);
+      requestAnimationFrame(detectLoop);
+    };
+   detectLoop();
   };
-
   const detect = async (net) => {
     // Check data is available
     if (
@@ -49,16 +54,25 @@ function App() {
       const expanded = casted.expandDims(0)
       const obj = await net.executeAsync(expanded)
       
-      const boxes = await obj[4].array()
-      const classes = await obj[5].array()
-      const scores = await obj[6].array()
+      // console.log("0: ", await obj[0].array())
+      // console.log("1: ", await obj[1].array())
+      // console.log("2: ",  await obj[2].array())
+      // console.log("3: ", await obj[3].array())
+      // console.log("4: ", await obj[4].array())
+      // console.log("5: ", await obj[5].array())
+      // console.log("6: ",  await obj[6].array())
+      console.log(await obj[0].array())
+      
+      const boxes = await obj[5].array()
+      const classes = await obj[1].array()
+      const scores = await obj[0].array()
     
       // Draw mesh
       const ctx = canvasRef.current.getContext("2d");
 
       // 5. TODO - Update drawing utility
       // drawSomething(obj, ctx)  
-      requestAnimationFrame(()=>{drawRect(boxes[0], classes[0], scores[0], 0.9, videoWidth, videoHeight, ctx)}); 
+      requestAnimationFrame(()=>{drawRect(boxes[0], classes[0], scores[0], 0.83, videoWidth, videoHeight, ctx)}); 
 
       tf.dispose(img)
       tf.dispose(resized)
@@ -99,7 +113,7 @@ function App() {
             left: 0,
             right: 0,
             textAlign: "center",
-            zindex: 8,
+            zIndex: 8,
             width: 640,
             height: 480,
           }}
